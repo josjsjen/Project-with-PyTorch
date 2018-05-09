@@ -1,8 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Mon May  7 18:33:07 2018
-
 @author: jie
 """
 import torch, numpy as np, os
@@ -37,10 +35,8 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
 
 
 
-
 ####################
 #### CNN models ####
-
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -52,18 +48,14 @@ class CNN(nn.Module):
             # Keeps running values for mean and variance
             # Also linearly transforms the output with learnable params
             nn.BatchNorm2d(16), ### !!!!!
-            # ReLU non-linearity
             nn.ReLU(),
-            # Max pooling (shrinks output by 1/2, to 14x14)
-            nn.MaxPool2d(2))
+            nn.MaxPool2d(2))   # Max pooling (shrinks output by 1/2, to 14x14)
         
-        # Equivalent to transforming from 16 to 32 layers
         self.layer2 = nn.Sequential(
             nn.Conv2d(16, 32, kernel_size=5, padding=2),
             nn.BatchNorm2d(32),
             nn.ReLU(),
-            # Shrink to 7x7
-            nn.MaxPool2d(2))
+            nn.MaxPool2d(2)) # Shrink to 7x7
         
         # Input: equivalent of a 7x7 image with 32 channels
         # Output: 10 units for 10 digit classes
@@ -77,8 +69,8 @@ class CNN(nn.Module):
         out = self.fc(out)
         return out
     
-
 cnn = CNN()
+
 
 
 #######################
@@ -87,6 +79,7 @@ modelFilename = 'mnist-cnn.model'
 
 if os.path.exists(modelFilename):
     cnn.load_state_dict(torch.load(modelFilename))
+
 # Or train from scratch
 else:   
     # Loss and Optimizer
